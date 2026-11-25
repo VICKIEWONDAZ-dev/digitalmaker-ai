@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+.venv/
+venv/
+ENV/
+
+# Local App Data & Credentials
+data/accounts.json
+data/projects/
+*.mp4
+*.mp3
+*.wav
+
+# OS & IDE
+.DS_Store
+.vscode/
+.idea/

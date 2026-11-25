@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DigitalMaker AI - Google Flow & ChatGPT Studio</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Navigation Header -->
+    <header class="top-header">
+      <div class="brand">
+        <div class="logo-icon">⚡</div>
+        <div class="brand-text">
+          <h1>DigitalMaker<span>.AI</span></h1>
+          <span class="badge">Google Flow + ChatGPT</span>
+        </div>
+      </div>
+
+      <!-- Quick Account Selectors -->
+      <div class="header-accounts">
+        <div class="account-pill" id="chatgptPill" onclick="openAccountsModal('chatgpt')">
+          <span class="status-dot green"></span>
+          <span class="label">ChatGPT:</span>
+          <strong id="activeChatgptLabel">Select Account</strong>
+          <span class="chevron">▾</span>
+        </div>
+
+        <div class="account-pill" id="googleflowPill" onclick="openAccountsModal('flow')">
+          <span class="status-dot green"></span>
+          <span class="label">Google Flow:</span>
+          <strong id="activeFlowLabel">Select Account</strong>
+          <span class="chevron">▾</span>
+        </div>
+
+        <button class="btn btn-outline" onclick="openAccountsModal('all')">
+          ⚙️ Manage Accounts
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Studio Dashboard -->
+    <main class="main-content">
+      <!-- Step 1: The Launchpad (DigitalMaker.AI Starting Flow) -->
+      <section class="studio-card launchpad-section">
+        <div class="section-header">
+          <div class="step-tag">Step 1: Pick Style & Topic</div>
+          <h2>Create a Viral Video with Consistent Characters</h2>
+          <p>Powered by ChatGPT for storytelling and Google Flow (Veo) for cinematic visual rendering.</p>
+        </div>
+
+        <!-- Style Selection Grid -->
+        <div class="form-group">
+          <label class="form-label">Select Visual Style</label>
+          <div class="style-grid" id="styleGrid">
+            <div class="style-card active" data-style="Cinematic Realism">
+              <div class="style-preview cinematic"></div>
+              <span>🎬 Cinematic Realism</span>
+            </div>
+            <div class="style-card" data-style="Cyberpunk Neo-Noir">
+              <div class="style-preview cyberpunk"></div>
+              <span>🌃 Cyberpunk Neo-Noir</span>
+            </div>
+            <div class="style-card" data-style="Dark Fantasy">
+              <div class="style-preview fantasy"></div>
+              <span>🐉 Dark Fantasy</span>
+            </div>
+            <div class="style-card" data-style="3D Anime & Pixar">
+              <div class="style-preview anime"></div>
+              <span>✨ 3D Anime Style</span>
+            </div>
+            <div class="style-card" data-style="Documentary / History">
+              <div class="style-preview documentary"></div>
+              <span>🏛️ Historical Docu</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2col">
+          <!-- Aspect Ratio Toggle -->
+          <div class="form-group">
+            <label class="form-label">Video Format / Aspect Ratio</label>
+            <div class="ratio-toggle">
+              <button type="button" class="ratio-btn active" data-ratio="9:16">
+                <span class="ratio-icon">📱</span>
+                <div class="ratio-info">
+                  <strong>9:16 Vertical</strong>
+                  <span>Shorts, TikTok, Reels</span>
+                </div>
+              </button>
+              <button type="button" class="ratio-btn" data-ratio="16:9">
+                <span class="ratio-icon">🖥️</span>
+                <div class="ratio-info">
+                  <strong>16:9 Widescreen</strong>
+                  <span>YouTube Long-Form</span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Character Preference & Cast Mode -->
+          <div class="form-group">
+            <div class="label-with-option">
+              <label class="form-label">Character Arc (Google Flow)</label>
+              <div class="refinement-choice">
+                <span class="small-label">Cast:</span>
+                <select id="charModeSelect" class="form-select-sm">
+                  <option value="multi">👥 Multi-Character Cast (2+ Characters)</option>
+                  <option value="single">👤 Single Solo Protagonist</option>
+                </select>
+              </div>
+            </div>
+            <input type="text" id="characterPrefInput" class="form-input" placeholder="e.g. Host 1: Tech expert Marcus; Host 2: Skeptical analyst Sarah (or leave blank to auto-create)" />
+            <span class="input-hint">Google Flow's Character Arc locks in facial and outfit consistency across shots for each character.</span>
+          </div>
+        </div>
+
+        <!-- Input Mode Switcher: Topic vs Custom Script -->
+        <div class="input-mode-tabs">
+          <button type="button" class="mode-tab-btn active" id="modeTopicBtn" onclick="switchInputMode('topic')">
+            💡 Generate from Concept / Topic
+          </button>
+          <button type="button" class="mode-tab-btn" id="modeScriptBtn" onclick="switchInputMode('custom_script')">
+            ✍️ Use My Own Script (Refine & Adapt)
+          </button>
+        </div>
+
+        <!-- Topic Prompt Input (Visible in Topic Mode) -->
+        <div class="form-group" id="topicInputGroup">
+          <label class="form-label">What is your video about?</label>
+          <div class="prompt-box">
+            <textarea id="topicInput" class="form-textarea" rows="3" placeholder="e.g. A rogue AI awakens deep inside an abandoned Arctic laboratory and sends its first message to humanity..."></textarea>
+            
+            <div class="prompt-suggestions">
+              <span class="suggestion-tag" onclick="useSuggestion('3 unexplainable phenomena deep under the ocean')">🌊 Ocean Mysteries</span>
+              <span class="suggestion-tag" onclick="useSuggestion('A lone samurai wandering a futuristic neo-Tokyo in the rain')">⚔️ Cyber Samurai</span>
+              <span class="suggestion-tag" onclick="useSuggestion('Marcus Aurelius on how to remain unbreakable in chaos')">🏛️ Stoic Mindset</span>
+              <span class="suggestion-tag" onclick="useSuggestion('The discovery of a hidden alien Dyson sphere near Proxima Centauri')">🚀 Sci-Fi Discovery</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom Script Input (Visible in Custom Script Mode) -->
+        <div class="form-group hidden" id="customScriptInputGroup">
+          <div class="label-with-option">
+            <label class="form-label">Paste Your Pre-Written Script</label>
+            <div class="refinement-choice">
+              <span class="small-label">Refinement:</span>
+              <select id="refinementSelect" class="form-select-sm">
+                <option value="enhance_pacing">⚡ Enhance Pacing & Viral Flow</option>
+                <option value="verbatim">🔒 Keep Spoken Lines Verbatim</option>
+              </select>
+            </div>
+          </div>
+          <div class="prompt-box">
+            <textarea id="customScriptInput" class="form-textarea" rows="6" placeholder="Paste your raw script, voiceover transcript, or notes here...&#10;&#10;ChatGPT will segment your text into timed visual scenes, invent/match a consistent Character Arc for Google Flow, and craft the Veo camera directions."></textarea>
+            <span class="input-hint">Tip: ChatGPT will segment your script into 4-6 balanced scenes and design the visual shots to match.</span>
+          </div>
+        </div>
+
+        <!-- Action Button -->
+        <div class="action-footer">
+          <button id="generateBtn" class="btn btn-primary btn-lg" onclick="generateStoryboard()">
+            <span class="btn-icon">⚡</span> <span id="generateBtnText">Generate Storyboard & Character Arc</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Step 2: Storyboard & Scenes Review (Initially Hidden) -->
+      <section id="storyboardSection" class="studio-card storyboard-section hidden">
+        <div class="section-header with-actions">
+          <div>
+            <div class="step-tag">Step 2: Storyboard Review</div>
+            <h2 id="storyboardTitle">Project Storyboard</h2>
+            <p id="storyboardSummary">Review generated scenes before sending to Google Flow.</p>
+          </div>
+          <button class="btn btn-success btn-lg" id="buildVideoBtn" onclick="createFlowProject()">
+            🚀 Send to Google Flow & Build Video
+          </button>
+        </div>
+
+        <!-- Characters Cast Section -->
+        <div class="characters-section">
+          <div class="section-subhead">
+            <h3>Google Flow Character Arcs (<span id="charCountBadge">1 Character</span>)</h3>
+            <span class="badge badge-accent">Consistent Faces & Styles Locked</span>
+          </div>
+          <div class="characters-grid" id="charactersGrid">
+            <!-- Dynamically injected character cards -->
+          </div>
+        </div>
+
+        <!-- Scenes List -->
+        <div class="scenes-container" id="scenesContainer">
+          <!-- Dynamically injected scene cards -->
+        </div>
+      </section>
+
+      <!-- Step 3: Google Flow Dispatch & Video Player (Initially Hidden) -->
+      <section id="resultSection" class="studio-card result-section hidden">
+        <div class="section-header">
+          <div class="step-tag">Step 3: Google Flow Render & Assembly</div>
+          <h2>Video Production Status</h2>
+          <p id="renderStatus">Rendering scenes in Google Flow (Veo)...</p>
+        </div>
+
+        <div class="video-preview-wrapper">
+          <div class="player-container">
+            <video id="finalVideoPlayer" controls autoplay muted loop playsinline class="preview-video"></video>
+          </div>
+          <div class="video-actions">
+            <a id="downloadVideoBtn" href="#" download class="btn btn-primary btn-lg">
+              ⬇️ Download Final MP4 Video
+            </a>
+            <button class="btn btn-outline" onclick="resetStudio()">
+              ✨ Create Another Video
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Multi-Account Management Modal -->
+  <div id="accountsModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Multi-Account Manager</h2>
+        <button class="close-btn" onclick="closeAccountsModal()">✕</button>
+      </div>
+
+      <div class="modal-tabs">
+        <button class="tab-btn active" id="tabChatgptBtn" onclick="switchModalTab('chatgpt')">🤖 ChatGPT Accounts</button>
+        <button class="tab-btn" id="tabFlowBtn" onclick="switchModalTab('flow')">🌊 Google Flow Accounts</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- ChatGPT Accounts Pane -->
+        <div id="paneChatgpt" class="tab-pane active">
+          <div class="add-account-card">
+            <h3>Add New ChatGPT Account</h3>
+            <div class="grid-2col">
+              <div class="form-group">
+                <label>Account Label</label>
+                <input type="text" id="gptLabelInput" class="form-input" placeholder="e.g. My Personal GPT-4o">
+              </div>
+              <div class="form-group">
+                <label>Model</label>
+                <select id="gptModelSelect" class="form-input">
+                  <option value="gpt-4o">GPT-4o (Recommended)</option>
+                  <option value="gpt-4o-mini">GPT-4o Mini (Fast)</option>
+                  <option value="gpt-4.5-preview">GPT-4.5 Preview</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>OpenAI API Key</label>
+              <input type="password" id="gptApiKeyInput" class="form-input" placeholder="sk-proj-...">
+            </div>
+            <button class="btn btn-primary" onclick="addChatgptAccount()">+ Save ChatGPT Account</button>
+          </div>
+
+          <div class="account-list" id="chatgptAccountList">
+            <!-- Injected account cards -->
+          </div>
+        </div>
+
+        <!-- Google Flow Accounts Pane -->
+        <div id="paneFlow" class="tab-pane">
+          <div class="add-account-card">
+            <h3>Add New Google Flow Account</h3>
+            <div class="grid-2col">
+              <div class="form-group">
+                <label>Account Label</label>
+                <input type="text" id="flowLabelInput" class="form-input" placeholder="e.g. Studio Account #1">
+              </div>
+              <div class="form-group">
+                <label>Google Account Email</label>
+                <input type="email" id="flowEmailInput" class="form-input" placeholder="creator@gmail.com">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Authentication Method</label>
+              <select id="flowAuthTypeSelect" class="form-input" onchange="toggleFlowAuthFields()">
+                <option value="session_cookie">Session Cookie / Token (flow.google.com / labs.google)</option>
+                <option value="api_key">Google Cloud / AI Studio API Key (Veo 3.1)</option>
+              </select>
+            </div>
+            <div class="form-group" id="flowTokenGroup">
+              <label>Google Flow Session Token / Cookies (OSID/SAPISID)</label>
+              <textarea id="flowTokenInput" class="form-textarea" rows="2" placeholder="Paste your Google Flow session token or cookie string..."></textarea>
+            </div>
+            <div class="form-group hidden" id="flowApiKeyGroup">
+              <label>Google Cloud / Gemini API Key</label>
+              <input type="password" id="flowApiKeyInput" class="form-input" placeholder="AIzaSy...">
+            </div>
+            <div class="form-group">
+              <label>Estimated Credits</label>
+              <input type="number" id="flowCreditsInput" class="form-input" value="50">
+            </div>
+            <button class="btn btn-primary" onclick="addGoogleFlowAccount()">+ Save Google Flow Account</button>
+          </div>
+
+          <div class="account-list" id="googleflowAccountList">
+            <!-- Injected account cards -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
