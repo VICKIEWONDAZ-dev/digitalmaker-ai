@@ -43,7 +43,20 @@ An automated video creation studio inspired by **DigitalMaker.AI**, engineered t
 
 ---
 
-## Architecture
+## Free Cloud Deployment (Option B - Render Free Tier)
+
+Deploy this app to the cloud at **$0/month** on Render:
+
+1. Push this repository to your GitHub account (already linked).
+2. Go to [Render.com](https://render.com) and click **"New +"** $\rightarrow$ **"Web Service"**.
+3. Select your repository: `VICKIEWONDAZ-dev/digitalmaker-ai`.
+4. Choose **Docker** environment. Render automatically detects the `Dockerfile` and `render.yaml`.
+5. Click **"Deploy Web Service"**!
+6. Render builds the container with FFmpeg and provides you with a free live public URL (e.g., `https://digitalmaker-ai.onrender.com`).
+
+---
+
+## Architecture (100% Free Stack)
 
 ```
 User Topic

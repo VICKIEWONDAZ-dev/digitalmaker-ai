@@ -1,0 +1,13 @@
+# Render Blueprint specification for 100% Free Hosting
+services:
+  - type: web
+    name: digitalmaker-ai
+    runtime: docker
+    plan: free
+    region: oregon
+    healthCheckPath: /api/accounts
+    envVars:
+      - key: APP_MASTER_KEY
+        generateValue: true
+      - key: PORT
+        value: 8000

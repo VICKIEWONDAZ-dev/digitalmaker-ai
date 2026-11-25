@@ -3,6 +3,7 @@ import os
 import uuid
 import time
 from typing import Dict, List, Optional, Any
+from backend.security import encrypt_secret, decrypt_secret
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
 ACCOUNTS_FILE = os.path.join(DATA_DIR, "accounts.json")
@@ -68,7 +69,7 @@ class AccountManager:
         new_account = {
             "id": account_id,
             "label": label.strip() or f"ChatGPT Account ({len(data['chatgpt_accounts']) + 1})",
-            "api_key": api_key.strip(),
+            "api_key": encrypt_secret(api_key.strip()),
             "model": model or "gpt-4o",
             "is_active": set_active or is_first,
             "status": "Ready",
@@ -113,9 +114,13 @@ class AccountManager:
         data = self._load_data()
         for acc in data.get("chatgpt_accounts", []):
             if acc.get("is_active"):
-                return acc
+                copy = dict(acc)
+                copy["api_key"] = decrypt_secret(copy["api_key"])
+                return copy
         if data.get("chatgpt_accounts"):
-            return data["chatgpt_accounts"][0]
+            copy = dict(data["chatgpt_accounts"][0])
+            copy["api_key"] = decrypt_secret(copy["api_key"])
+            return copy
         return None
 
     # ------------------- Google Flow Account Management -------------------
@@ -154,8 +159,8 @@ class AccountManager:
             "label": label.strip() or f"Google Flow Account ({len(data['google_flow_accounts']) + 1})",
             "email": email.strip(),
             "auth_type": auth_type,
-            "session_token": session_token.strip(),
-            "api_key": api_key.strip(),
+            "session_token": encrypt_secret(session_token.strip()),
+            "api_key": encrypt_secret(api_key.strip()),
             "estimated_credits": estimated_credits,
             "is_active": set_active or is_first,
             "status": "Ready",
@@ -199,9 +204,15 @@ class AccountManager:
         data = self._load_data()
         for acc in data.get("google_flow_accounts", []):
             if acc.get("is_active"):
-                return acc
+                copy = dict(acc)
+                copy["session_token"] = decrypt_secret(copy.get("session_token", ""))
+                copy["api_key"] = decrypt_secret(copy.get("api_key", ""))
+                return copy
         if data.get("google_flow_accounts"):
-            return data["google_flow_accounts"][0]
+            copy = dict(data["google_flow_accounts"][0])
+            copy["session_token"] = decrypt_secret(copy.get("session_token", ""))
+            copy["api_key"] = decrypt_secret(copy.get("api_key", ""))
+            return copy
         return None
 
     def get_next_available_flow_account(self, failed_account_id: str) -> Optional[Dict[str, Any]]:

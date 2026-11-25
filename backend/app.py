@@ -17,7 +17,7 @@ from backend.video_assembler import VideoAssembler
 account_manager = AccountManager()
 video_assembler = VideoAssembler()
 
-PORT = 8000
+PORT = int(os.environ.get("PORT", 8000))
 FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
 DATA_DIR = os.path.join(BASE_DIR, "data")
 
